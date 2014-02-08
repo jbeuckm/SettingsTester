@@ -1,0 +1,6 @@
+{
+    command: "ls",
+    arguments: {
+    	       "-al": ""
+    }
+}

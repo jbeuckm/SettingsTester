@@ -1,23 +1,20 @@
 {
-  "name":"PCL Regognition Tester",
+  "name":"settings_tester",
   "version":"0.0.1",
   "author":"Joe Beuckman <joe@beigerecords.com>",
-  "description":"Tests the PCL correspondence 3D recognizer with different settings to find the best ones.",
+  "description":"Tests command line arguments by analyzing stdout.",
   "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-uglify": "~0.2.2"
   },
   "scripts":{
   },
   "repository":{
-    "type":"git",
+    "type":"git"
   },
   "keywords":[
-    "pcl",
-    "pointcloud",
-    "correspondence"
-  ],
-  dependencies: {
-
-
-  }
-
+	"genetic algorithm"
+  ]
 }
