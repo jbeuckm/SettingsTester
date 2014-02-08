@@ -7,8 +7,8 @@ var fs = require('fs');
 
 program
   .version('0.0.1')
-    .option('-c, --config [json file]', 'JSON file that configures the test', "config.js")
-    .option('-a, --analyzer [js function file]', 'File containing a Javascript function that grades the output of the command')
+    .option('-c, --config [json file]', 'test configuration file', 'config.js')
+    .option('-a, --analyzer [js file]', 'fitness function for command output', 'analyzer.js')
   .parse(process.argv);
 
 if (!program.config) {

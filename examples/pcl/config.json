@@ -1,8 +1,8 @@
 {
-    "command": "correspondence_grouping",
+    "command": "../../../pcl/build/correspondence_grouping",
     "arguments": {
-    	       "milk.pcd": null,
-	       "milk_cartoon_all_small_clorox.pcd": null,
+    	       "../../../pcl/milk.pcd": null,
+	       "../../../pcl/milk_cartoon_all_small_clorox.pcd": null,
 	       "-r": null,
 	       "--model_ss": [7.0, 8.0],
 	       "--scene_ss": [15, 25],
