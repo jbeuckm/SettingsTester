@@ -142,8 +142,13 @@ function runTest(command, args, callback) {
     var analysis  = fitness.analyze(command, args, output, err);
     analysis.duration = endTime - startTime;
 
-    callback(null, analysis);
-
+    if (code != 0) {
+      console.warn("process exited with code "+code);
+      callback(stderr);
+    }
+    else {
+      callback(null, analysis);
+    }
   });
 
 }
