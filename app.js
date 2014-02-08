@@ -39,7 +39,6 @@ function readConfigFile() {
 	    return console.log(err);
 	}
 	config = JSON.parse(data);
-	console.log(config);
 	runTest(config, analyze);
     });
 }
