@@ -47,12 +47,13 @@ function runTest(config, analyzer) {
     // build command line arguments
     var commandPath = config.command;
     var args = [];
-    for (var i in config.arguments) {
+    for (var i=0, l=config.arguments.length; i<l; i++) {
 
-	args.push(i);
-
-	if (config.arguments[i] !== null) {
-	    args.push(config.arguments[i]);
+	var arg = config.arguments[i];
+	switch (arg.type) {
+	case "path": 
+	    break;
+//	    args.push(config.arguments[i]);
 	}
 
     }
