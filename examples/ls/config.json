@@ -5,7 +5,7 @@
 
       "mode": {
         "type": "option",
-        "prefix": ["", "-l", "-al", "-h", "-G", "-alh"]
+        "values": ["", "-l", "-al", "-h", "-G", "-alh"]
       }
 
     }

@@ -13,8 +13,8 @@
     },
 
     "autores": {
-      "type": "options",
-      "prefix": ["", "-r"]
+      "type": "option",
+      "values": ["", "-r"]
     },
     "model_ss": {
       "type": "float",
