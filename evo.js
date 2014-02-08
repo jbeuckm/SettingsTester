@@ -72,6 +72,8 @@ function buildTests() {
  */
 function runTest(command, args, callback) {
 
+  var startTime = (new Date()).getTime();
+
   var ps = cp.spawn(command, args);
 
   ps.stderr.setEncoding('utf8');
@@ -88,15 +90,12 @@ function runTest(command, args, callback) {
   });
 
   ps.on('close', function (code) {
-    console.log('ps process exited with code ' + code);
 
-    if (code != 0) {
-      callback(err);
+    var endTime = (new Date()).getTime();
 
-    }
-    else {
-      callback(null, fitness.analyze(command, args, output, err));
-    }
+    console.log('ps process exited with code ' + code + ' in ' + (endTime - startTime) + 'ms');
+
+    callback(null, fitness.analyze(command, args, output, err));
 
   });
 

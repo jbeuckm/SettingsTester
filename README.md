@@ -1,7 +1,7 @@
 Evo
 ==============
 
-Designed to test a command with different arguments repeatedly in order to maximize the "fitness" calculated by a user-supplied function on the command's output.
+Test a command with different arguments repeatedly to maximize your fitness function on the command's output.
 
 ###config.js###
 
