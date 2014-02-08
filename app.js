@@ -8,7 +8,7 @@ var fs = require('fs');
 program
   .version('0.0.1')
     .option('-c, --config [json file]', 'JSON file that configures the test', "config.js")
-//  .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
+    .option('-a, --analyzer [js function file]', 'File containing a Javascript function that grades the output of the command')
   .parse(process.argv);
 
 if (!program.config) {
@@ -16,18 +16,35 @@ if (!program.config) {
     process.exit(-1);
 }
 
-// read config file
-fs.readFile(program.config, 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-    var config = JSON.parse(data);
-    console.log(config);
-    processConfig(config);
-});
+// load the analyzer function that will grade the output of the command
+var analyze;
+if (program.analyzer) {
+    fs.readFile(program.analyzer, 'utf8', function (err, data) {
+	if (err) {
+	    return console.log(err);
+	}
+	eval(data);
+	readConfigFile();
+    });
+}
+else {
+    readConfigFile();
+}
 
+var config;
+function readConfigFile() {
+    // read config file
+    fs.readFile(program.config, 'utf8', function (err,data) {
+	if (err) {
+	    return console.log(err);
+	}
+	config = JSON.parse(data);
+	console.log(config);
+	runTest(config, analyze);
+    });
+}
 
-function processConfig(config) {
+function runTest(config, analyzer) {
     // build command line arguments
     var commandPath = config.command;
     var args = [];
@@ -47,7 +64,12 @@ function processConfig(config) {
     ps.stdout.setEncoding('utf8');
 
     ps.stdout.on('data', function(data){
-	console.log(data);
+	if (analyze) {
+	    console.log(analyze(data));
+	}
+	else {
+	    console.log(data);
+	}
     });
 
     ps.stderr.on('data', function(data){

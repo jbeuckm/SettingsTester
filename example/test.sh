@@ -1,1 +1,1 @@
-../app.js -c config.json 
+../app.js -c config.json -a analyzer.js
