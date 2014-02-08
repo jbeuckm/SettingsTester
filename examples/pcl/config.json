@@ -1,0 +1,13 @@
+{
+    "command": "correspondence_grouping",
+    "arguments": {
+    	       "milk.pcd": null,
+	       "milk_cartoon_all_small_clorox.pcd": null,
+	       "-r": null,
+	       "--model_ss": [7.0, 8.0],
+	       "--scene_ss": [15, 25],
+	       "--rf_rad": [5, 15],
+	       "--descr_rad": [10, 20],
+	       "--cg_size": [5, 15]
+    }
+}
