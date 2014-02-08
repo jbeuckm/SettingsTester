@@ -1,6 +1,6 @@
 {
-    command: "ls",
-    arguments: {
-    	       "-al": ""
+    "command": "ls",
+    "arguments": {
+    	       "-al": null
     }
 }
