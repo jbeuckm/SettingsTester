@@ -1,0 +1,1 @@
+../app.js -c config.json 
