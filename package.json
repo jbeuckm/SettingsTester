@@ -16,5 +16,9 @@
   },
   "keywords":[
 	"genetic algorithm"
-  ]
+  ],
+  "dependencies": {
+    "commander": ">= 1",
+    "glob": ">= 1"
+  }
 }

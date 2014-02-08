@@ -7,9 +7,10 @@ var ab = require('./lib/argument_builder.js');
 var cartesian = require('./lib/cartesian.js');
 
 program
-  .version('0.0.1')
+  .version('0.1')
   .option('-c, --config [json file]', 'test configuration file', 'config.js')
   .option('-a, --analyzer [js file]', 'fitness function for command output', 'analyzer.js')
+  .option('-t, --test', 'just echo a few example commands to verify config')
   .parse(process.argv);
 
 if (!program.config) {
@@ -57,20 +58,62 @@ function buildTests() {
     domains.push(builders[i].domain());
   }
 
-  console.log(domains);
   var combinations = cartesian.product(domains);
-console.log(combinations);
 
-  for (var i= 0, l=combinations.length; i<l; i++) {
+  // test mode - just output up to five rows
+  if (program.test) {
+    outputTestCommands(combinations);
+    return;
+  }
+  else {
+    runTests(combinations);
+  }
+}
 
-    runTest(command, combinations[i], function(err, fitness){
-      console.log(fitness);
+function runTests(combinations) {
+
+  function runNextTest() {
+
+    if (combinations.length == 0) {
+      return;
+    }
+
+    var combination = combinations.shift();
+
+    runTest(command, combination, function(err, analysis){
+
+      var report = analysis.duration+"ms\t"+command + "\t";
+
+      for (var j= 0, m=combination.length; j<m; j++) {
+        report += combination[j] + "\t";
+      }
+
+      for (var j in analysis) {
+        report += analysis[j] + "\t";
+      }
+
+      console.log(report);
+
+      runNextTest();
     });
 
   }
 
+  runNextTest();
 }
 
+
+function outputTestCommands(combinations) {
+  var demoIndices = [];
+
+  for (var i=0; (i<5 && i<combinations.length); i++) {
+    demoIndices.push(Math.floor(Math.random() * combinations.length));
+  }
+
+  for (var i=0; i<demoIndices.length; i++) {
+    console.log(command + " " + combinations[demoIndices[i]]);
+  }
+}
 
 /**
  * Run the command, calling back with error or fitness result
@@ -103,9 +146,10 @@ function runTest(command, args, callback) {
 
     var endTime = (new Date()).getTime();
 
-    console.log('process exited with code ' + code + ' in ' + (endTime - startTime) + 'ms');
+    var analysis  = fitness.analyze(command, args, output, err);
+    analysis.duration = endTime - startTime;
 
-    callback(null, fitness.analyze(command, args, output, err));
+    callback(null, analysis);
 
   });
 

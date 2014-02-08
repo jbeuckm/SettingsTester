@@ -1,0 +1,12 @@
+{
+    "command": "cat",
+
+    "arguments": {
+
+      "file": {
+        "type": "path",
+        "path": "*.*"
+      }
+
+    }
+}
