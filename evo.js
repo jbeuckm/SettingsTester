@@ -111,7 +111,7 @@ function outputTestCommands(combinations) {
   }
 
   for (var i=0; i<demoIndices.length; i++) {
-    console.log(command + " " + combinations[demoIndices[i]]);
+    console.log(command + " " + combinations[demoIndices[i]].join(" "));
   }
 }
 
