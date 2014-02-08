@@ -4,6 +4,7 @@ var program = require('commander');
 var cp = require('child_process');
 var fs = require('fs');
 var ab = require('./lib/argument_builder.js');
+var cartesian = require('./lib/cartesian.js');
 
 program
   .version('0.0.1')
@@ -51,14 +52,23 @@ function readConfigFile() {
 
 function buildTests() {
 
-  var args = [];
+  var domains = [];
   for (var i= 0, l=builders.length; i<l; i++) {
-    args.push(builders[i].build());
+    domains.push(builders[i].domain());
   }
 
-  runTest(command, args, function(err, fitness){
-    console.log(fitness);
-  });
+  console.log(domains);
+  var combinations = cartesian.product(domains);
+console.log(combinations);
+
+  for (var i= 0, l=combinations.length; i<l; i++) {
+
+    runTest(command, combinations[i], function(err, fitness){
+      console.log(fitness);
+    });
+
+  }
+
 }
 
 
@@ -93,7 +103,7 @@ function runTest(command, args, callback) {
 
     var endTime = (new Date()).getTime();
 
-    console.log('ps process exited with code ' + code + ' in ' + (endTime - startTime) + 'ms');
+    console.log('process exited with code ' + code + ' in ' + (endTime - startTime) + 'ms');
 
     callback(null, fitness.analyze(command, args, output, err));
 
