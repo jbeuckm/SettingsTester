@@ -8,7 +8,7 @@ var cartesian = require('./lib/cartesian.js');
 
 program
   .version('0.1')
-  .option('-c, --config [json file]', 'test configuration file', 'config.js')
+  .option('-c, --config [json file]', 'test configuration file', 'config.json')
   .option('-a, --analyzer [js file]', 'fitness function for command output', 'analyzer.js')
   .option('-t, --test', 'just echo a few example commands to verify config')
   .parse(process.argv);
@@ -115,14 +115,7 @@ function outputTestCommands(combinations) {
   }
 }
 
-/**
- * Run the command, calling back with error or fitness result
- *
- * @param command
- * @param args
- * @param analyzer
- * @param callback
- */
+
 function runTest(command, args, callback) {
 
   var startTime = (new Date()).getTime();

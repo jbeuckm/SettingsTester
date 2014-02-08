@@ -1,21 +1,20 @@
 {
-
   "command": "../../../pcl/build/correspondence_grouping",
 
   "arguments": {
+
     "model": {
       "type": "path",
-      "folder": "../../../pcl/",
-      "files": "milk.pcd"
+      "path": "../../../pcl/milk.pcd"
     },
     "scene": {
       "type": "path",
-      "folder": "../../../pcl/",
-      "files": "milk_cartoon_all_small_clorox.pcd"
+      "path": "../../../pcl/milk_cartoon_all_small_clorox.pcd"
     },
+
     "autores": {
-      "type": "flag",
-      "value": "-r"
+      "type": "options",
+      "prefix": ["", "-r"]
     },
     "model_ss": {
       "type": "float",
