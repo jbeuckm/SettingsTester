@@ -32,7 +32,7 @@ exports.analyze = function(command, args, stdout, stderr) {
   var fitness_score = xxx; // analyze output for fitness of the test results
 
   return {
-    my_measurement: xxx,
+    my_measurement: yyy,
     fitness: fitness_score
   };
 

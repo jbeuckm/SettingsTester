@@ -2,47 +2,46 @@
 
   "command": "../../../pcl/build/correspondence_grouping",
 
-  "arguments": [
-    {
+  "arguments": {
+    "model": {
       "type": "path",
       "folder": "../../../pcl/",
       "files": "milk.pcd"
     },
-    {
+    "scene": {
       "type": "path",
-
       "folder": "../../../pcl/",
       "files": "milk_cartoon_all_small_clorox.pcd"
     },
-    {
+    "autores": {
       "type": "flag",
       "value": "-r"
     },
-    {
+    "model_ss": {
       "type": "float",
       "prefix": "--model_ss",
       "range": [7.0, 8.0]
 
     },
-    {
+    "scene_ss": {
       "prefix": "--scene_ss",
       "type": "integer",
       "range": [15, 25]
     },
-    {
+    "rf_rad": {
       "prefix": "--rf_rad",
       "type": "integer",
       "range": [5, 15]
     },
-    {
+    "descr_rad": {
       "prefix": "--descr_rad",
       "type": "integer",
       "range": [10, 20]
     },
-    {
+    "cg_size": {
       "prefix": "--cg_size",
       "type": "integer",
       "range": [5, 15]
     }
-  ]
+  }
 }
