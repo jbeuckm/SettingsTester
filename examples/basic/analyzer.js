@@ -1,3 +1,4 @@
 analyze = function(result) {
-    return .5;
-}
+    return result.split('').length;
+};
+

@@ -1,46 +1,48 @@
 {
-    "command": "../../../pcl/build/correspondence_grouping",
-    "arguments": [
-    		 {
-			"type": "path",
-			"folder": "../../../pcl/",
-"files": "milk.pcd"
-			},
-			{
-"type": "path",
 
-	       "folder": "../../../pcl/",
-"files": "milk_cartoon_all_small_clorox.pcd"
-},
-{
-"type": "flag",
-"value": "-r"
-},
-{
-	       		     "type": "float",
-"prefix": "--model_ss",
-			     "range": [7.0, 8.0]
+  "command": "../../../pcl/build/correspondence_grouping",
 
-		},
-{
-	       "prefix": "--scene_ss",
-	       		     "type": "integer",
-			     "range": [15, 25]
-			     },
-{
-	       "prefix": "--rf_rad",
-	       		   "type": "integer",
-			   "range": [5, 15]
-		},
-{
-	       "prefix": "--descr_rad",
-	       		      "type": "integer",
-			      "range": [10, 20]
-			      },
-{
-	       "prefix": "--cg_size",
-	       		    "type": "integer",
-	       		    "range": [5, 15]
-			    }
-    ]
+  "arguments": [
+    {
+      "type": "path",
+      "folder": "../../../pcl/",
+      "files": "milk.pcd"
+    },
+    {
+      "type": "path",
+
+      "folder": "../../../pcl/",
+      "files": "milk_cartoon_all_small_clorox.pcd"
+    },
+    {
+      "type": "flag",
+      "value": "-r"
+    },
+    {
+      "type": "float",
+      "prefix": "--model_ss",
+      "range": [7.0, 8.0]
+
+    },
+    {
+      "prefix": "--scene_ss",
+      "type": "integer",
+      "range": [15, 25]
+    },
+    {
+      "prefix": "--rf_rad",
+      "type": "integer",
+      "range": [5, 15]
+    },
+    {
+      "prefix": "--descr_rad",
+      "type": "integer",
+      "range": [10, 20]
+    },
+    {
+      "prefix": "--cg_size",
+      "type": "integer",
+      "range": [5, 15]
+    }
+  ]
 }
