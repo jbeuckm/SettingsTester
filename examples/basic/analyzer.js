@@ -1,4 +1,8 @@
-analyze = function(result) {
-    return result.split('').length;
+
+exports.analyze = function(command, args, stdout, stderr) {
+
+  return {
+    fitness: stdout.split('').length
+  };
 };
 

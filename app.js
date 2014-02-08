@@ -17,15 +17,12 @@ if (!program.config) {
 }
 
 // load the analyzer function that will grade the output of the command
-var analyze;
+var fitness;
 if (program.analyzer) {
-  fs.readFile(program.analyzer, 'utf8', function (err, data) {
-    if (err) {
-      return console.log(err);
-    }
-    eval(data);
+
+    fitness = require(process.cwd() + "/" + program.analyzer);
+
     readConfigFile();
-  });
 }
 else {
   readConfigFile();
@@ -59,7 +56,7 @@ function buildTests() {
     args.push(builders[i].build());
   }
 
-  runTest(command, args, analyze, function(err, fitness){
+  runTest(command, args, function(err, fitness){
     console.log(fitness);
   });
 }
@@ -73,7 +70,7 @@ function buildTests() {
  * @param analyzer
  * @param callback
  */
-function runTest(command, args, analyze, callback) {
+function runTest(command, args, callback) {
 
   var ps = cp.spawn(command, args);
 
@@ -98,7 +95,7 @@ function runTest(command, args, analyze, callback) {
 
     }
     else {
-      callback(null, analyze(output));
+      callback(null, fitness.analyze(command, args, output, err));
     }
 
   });
