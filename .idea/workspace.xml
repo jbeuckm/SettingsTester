@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14e6cc86-9e11-43a6-90de-ae2b29d5d6e2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/pcl/analyzer.js" afterPath="$PROJECT_DIR$/examples/pcl/analyzer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evo.js" afterPath="$PROJECT_DIR$/evo.js" />
     </list>
     <ignored path="SettingsTester.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,19 +24,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="evo.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="evo.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evo.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="53" selection-start="3089" selection-end="3089" vertical-scroll-proportion="0.0">
+            <state line="157" column="34" selection-start="3342" selection-end="3342" vertical-scroll-proportion="0.80031204">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analyzer.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="analyzer.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/pcl/analyzer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.22464898">
+            <state line="9" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -123,8 +123,8 @@
         <option value="$PROJECT_DIR$/examples/pcl/config.json" />
         <option value="$PROJECT_DIR$/examples/ls/config.json" />
         <option value="$PROJECT_DIR$/lib/argument_builder.js" />
-        <option value="$PROJECT_DIR$/evo.js" />
         <option value="$PROJECT_DIR$/examples/pcl/analyzer.js" />
+        <option value="$PROJECT_DIR$/evo.js" />
       </list>
     </option>
   </component>
@@ -510,16 +510,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/evo.js">
+    <entry file="file://$PROJECT_DIR$/examples/pcl/analyzer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="53" selection-start="3089" selection-end="3089" vertical-scroll-proportion="0.0">
+        <state line="9" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/pcl/analyzer.js">
+    <entry file="file://$PROJECT_DIR$/evo.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.22464898">
+        <state line="157" column="34" selection-start="3342" selection-end="3342" vertical-scroll-proportion="0.80031204">
           <folding />
         </state>
       </provider>

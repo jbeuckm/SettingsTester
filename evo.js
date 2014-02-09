@@ -127,12 +127,24 @@ function runTest(command, args, callback) {
 
   var output = "";
   ps.stdout.on('data', function (data) {
+    console.log('.');
       output += data;
   });
 
   var err = "";
   ps.stderr.on('data', function (data) {
+    console.log('x');
     err += data;
+  });
+
+  ps.on('error', function (code) {
+    console.log("error "+code);
+  });
+  ps.on('exit', function (code) {
+    console.log("exit "+code);
+  });
+  ps.on('disconnect', function (code) {
+    console.log("disconnect "+code);
   });
 
   ps.on('close', function (code) {
@@ -143,7 +155,7 @@ function runTest(command, args, callback) {
     analysis.duration = endTime - startTime;
 
     if (code != 0) {
-      console.warn("process exited with code "+code);
+      console.warn("process closed with code "+code);
       callback(stderr);
     }
     else {
