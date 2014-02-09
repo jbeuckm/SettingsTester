@@ -12,7 +12,8 @@
   "scripts":{
   },
   "repository":{
-    "type":"git"
+    "type":"git",
+    "url":"git@github.com:jbeuckm/evo.git"
   },
   "keywords":[
 	"genetic algorithm"
