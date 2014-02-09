@@ -14,13 +14,13 @@ A JSON file configures the test runner:
     "arguments": { // list of named command line arguments 
                    // in the order they will appear on the command line
 
-      "mode": {
+      "k type": {
         "type": "option", // discrete set of possible options to try
         "prefix": "-k", // this argument will be run as "-k <value>"
         "values": ["small", "big", "other"] // test values for this argument
       },
 
-      "k arg": {
+      "int arg": {
         "type": "integer",
         "range": [2, 8] // test ints between 2 and 8 inclusive
       },
