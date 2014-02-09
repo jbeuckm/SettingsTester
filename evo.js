@@ -65,7 +65,12 @@ function buildTests() {
       outputTestCommands(set_combinations, arg_combinations);
     }
     else {
-      runTestSet(set_combinations, arg_combinations);
+
+      var arg_combination = arg_combinations.shift();
+
+      var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
+
+      runTestSet(test_set_combinations, arg_combination);
     }
 
   });
@@ -73,38 +78,45 @@ function buildTests() {
 
 }
 
+/**
+ *  Run these arguments with all combinations of the test set.
+ *
+ * @param test_set_combinations
+ * @param arg_combination
+ */
+function runTestSet(test_set_combinations, arg_combination) {
 
-function runTestSet(set_combinations, arg_combinations) {
+  var results = [];
 
   function runNextTest() {
 
-    if (arg_combinations.length == 0) {
-      return;
+    if (test_set_combinations.length == 0) {
+      return results;
     }
 
-    var arg_combination = arg_combinations.shift();
-    var set_combination = set_combinations.shift();
+    var set_combination = test_set_combinations.shift();
 
     runTest(command, set_combination, arg_combination, function(err, analysis){
 
       if (err) {
         console.warn(err);
-        runNextTest();
         return;
       }
+      else {
 
-      var report = analysis.duration+"ms\t"+command + "\t";
-      delete analysis.duration;
+        var report = analysis.duration+"ms\t"+command + "\t";
+        delete analysis.duration;
 
-      for (var j= 0, m=arg_combination.length; j<m; j++) {
-        report += arg_combination[j] + "\t";
+        for (var j= 0, m=arg_combination.length; j<m; j++) {
+          report += arg_combination[j] + "\t";
+        }
+
+        for (var j in analysis) {
+          report += analysis[j] + "\t";
+        }
+
+        console.log(report);
       }
-
-      for (var j in analysis) {
-        report += analysis[j] + "\t";
-      }
-
-      console.log(report);
 
       runNextTest();
     });
@@ -177,7 +189,7 @@ function prefixCombination(set_combination, arg_combination) {
       prefixedArgs.push(arg_combination[i]);
     }
   }
-  
+
   return prefixedArgs;
 }
 

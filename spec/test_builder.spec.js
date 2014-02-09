@@ -54,4 +54,26 @@ describe("Test Builder", function() {
 
   });
 
+  it("selects test combinations from the domain", function(){
+
+    var config = {
+      testing: {
+        test_size: 5
+      }
+    };
+
+    var combinations = [[0,1],[1,2],[2,3]];
+
+    var sets = builder.buildTestSet(config, combinations);
+
+    expect(sets.length).toEqual(3);
+
+    combinations.push([0,0],[1,1],[2,2],[3,3]);
+
+    sets = builder.buildTestSet(config, combinations);
+
+    expect(sets.length).toEqual(5);
+
+  });
+
 });

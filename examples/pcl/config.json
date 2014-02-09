@@ -1,11 +1,11 @@
 {
-  "command": "../../../pcl/build/correspondence_grouping",
-
   "testing": {
     "test_size": 10,
     "population": 8,
     "generators": 3
   },
+
+  "command": "../../../pcl/build/correspondence_grouping",
 
   "arguments": {
 
