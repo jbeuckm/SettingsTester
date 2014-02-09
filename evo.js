@@ -110,7 +110,7 @@ function runTestSet(test_set_combinations, arg_combination) {
         for (var j= 0, m=set_combination.length; j<m; j++) {
 
           var set_item = set_combination[j];
-          if (set_builders[j].type == "path") {
+          if (set_builders[j].config.type == "path") {
             set_item = filenameFromPath(set_item);
           }
           report.push(set_item);
