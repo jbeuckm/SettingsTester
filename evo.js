@@ -127,13 +127,11 @@ function runTest(command, args, callback) {
 
   var output = "";
   ps.stdout.on('data', function (data) {
-    console.log(data);
-      output += data;
+    output += data;
   });
 
   var err = "";
   ps.stderr.on('data', function (data) {
-    console.warn(data);
     err += data;
   });
 
@@ -145,11 +143,9 @@ function runTest(command, args, callback) {
   });
 
   ps.on('close', function(code){
-    console.warn("process closed with code "+code);
     finish(code);
   });
   ps.on('exit', function (code) {
-    console.warn("process exited with code "+code);
     finish(code);
   });
 
