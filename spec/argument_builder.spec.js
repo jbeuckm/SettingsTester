@@ -12,7 +12,7 @@ describe("Argument Builder", function() {
 
   beforeEach(function(){
 
-    builder = ab.createInstance("test", config);
+    builder = ab.getInstance("test", config);
 
   });
 
