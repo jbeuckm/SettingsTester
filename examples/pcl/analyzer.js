@@ -11,7 +11,7 @@ exports.analyze = function(command, set_combination, arg_combination, stdout, st
   }
 
   return {
-    fitness: stdout.split('').length
+    fitness: result.instances
   };
 
 };

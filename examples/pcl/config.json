@@ -12,12 +12,12 @@
     "model": {
       "test_set": true,
       "type": "path",
-      "path": "../../../pcl/milk.pcd"
+      "path": "/myshare/pointclouds/objects/*.pcd"
     },
     "scene": {
       "test_set": true,
       "type": "path",
-      "path": "../../../pcl/milk_cartoon_all_small_clorox.pcd"
+      "path": "/myshare/pointclouds/scenes/*.pcd"
     },
 
     "autores": {
