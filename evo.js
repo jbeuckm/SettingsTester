@@ -60,6 +60,10 @@ function buildTests() {
 
   var combinations = cartesian.product(domains);
 
+  if (!program.sorted) {
+    combinations = shuffle(combinations);
+  }
+
   // test mode - just output up to five rows
   if (program.test) {
     outputTestCommands(combinations);
@@ -68,6 +72,11 @@ function buildTests() {
     runTests(combinations);
   }
 }
+
+function shuffle(o){ //v1.0
+  for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+  return o;
+};
 
 function runTests(combinations) {
 

@@ -4,11 +4,6 @@
   "author":"Joe Beuckman <joe@beigerecords.com>",
   "description":"Tests command line arguments by analyzing stdout.",
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.6.3",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.2",
-
     "mocha": "*",
     "chai" : "*"
   },
