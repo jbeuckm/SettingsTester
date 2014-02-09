@@ -43,12 +43,13 @@ describe("Test Builder", function() {
       }
     };
 
-    builder.readConfig(config, function(err, config, command, args_builders, test_builders) {
+    builder.readConfig(config, function(err, config, command, args_builders, set_builders) {
 
-      builder.buildCombinations(args_builders, test_builders, function(err, test_combinations, arg_combinations){
-        expect(test_combinations.length).toEqual(2);
-        expect(arg_combinations.length).toEqual(2);
-      });
+      var arg_combinations = builder.buildCombinations(args_builders);
+      expect(arg_combinations.length).toEqual(2);
+
+      var set_combinations = builder.buildCombinations(set_builders);
+      expect(set_combinations.length).toEqual(2);
 
     });
 

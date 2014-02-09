@@ -53,30 +53,30 @@ function readConfigFile() {
 
 function buildTests() {
 
-  testBuilder.buildCombinations(arg_builders, set_builders, function(err, set_combinations, arg_combinations){
+  var set_combinations = testBuilder.buildCombinations(set_builders);
+  var arg_combinations = testBuilder.buildCombinations(arg_builders);
 
-    if (!program.sorted) {
-      set_combinations = testBuilder.shuffle(set_combinations);
-      arg_combinations = testBuilder.shuffle(arg_combinations);
-    }
+  if (!program.sorted) {
+    set_combinations = testBuilder.shuffle(set_combinations);
+    arg_combinations = testBuilder.shuffle(arg_combinations);
+  }
 
-    // test mode - just output up to five rows
-    if (program.test) {
-      outputTestCommands(set_combinations, arg_combinations);
-    }
-    else {
+  // test mode - just output up to five rows
+  if (program.test) {
+    outputTestCommands(set_combinations, arg_combinations);
+  }
+  else {
 
-      var arg_combination = arg_combinations.shift();
+    var arg_combination = arg_combinations.shift();
 
-      var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
+    var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
 
-      runTestSet(test_set_combinations, arg_combination);
-    }
-
-  });
-
+    runTestSet(test_set_combinations, arg_combination);
+  }
 
 }
+
+
 
 /**
  *  Run these arguments with all combinations of the test set.
