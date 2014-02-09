@@ -4,6 +4,7 @@ var program = require('commander');
 var cp = require('child_process');
 var fs = require('fs');
 var ab = require('./lib/argument_builder.js');
+var testBuilder = require('./lib/test_builder.js');
 var cartesian = require('./lib/cartesian.js');
 
 program
@@ -31,31 +32,28 @@ else {
 }
 
 var command;
-var builders = [];
+var set_builders = [];
+var arg_builders = [];
+
 
 function readConfigFile() {
-  // read config file
-  fs.readFile(program.config, 'utf8', function (err, data) {
-    if (err) {
-      return console.log(err);
-    }
-    var config = JSON.parse(data);
-    command = config.command;
-    for (var i in config.arguments) {
-      builders.push(ab.getInstance(i, config.arguments[i]));
-    }
+
+  testBuilder.readConfigFile(program.config, function(err, _command, _set_builders, _arg_builders) {
+    command = _command;
+    set_builders = _set_builders;
+    arg_builders = _arg_builders;
 
     buildTests();
-
   });
+
 }
 
 
 function buildTests() {
 
   var domains = [];
-  for (var i= 0, l=builders.length; i<l; i++) {
-    domains.push(builders[i].domain());
+  for (var i= 0, l=arg_builders.length; i<l; i++) {
+    domains.push(arg_builders[i].domain());
   }
 
   var combinations = cartesian.product(domains);
@@ -77,6 +75,7 @@ function shuffle(o){ //v1.0
   for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
   return o;
 };
+
 
 function runTests(combinations) {
 
@@ -145,8 +144,8 @@ function prefixCombination(combination) {
 
     if (combination[i] === null) continue;
 
-    if (builders[i].config.prefix) {
-      prefixedArgs.push(builders[i].config.prefix);
+    if (arg_builders[i].config.prefix) {
+      prefixedArgs.push(arg_builders[i].config.prefix);
     }
     prefixedArgs.push(combination[i]);
   }
