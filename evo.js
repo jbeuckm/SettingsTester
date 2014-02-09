@@ -82,9 +82,10 @@ function runTestSet(set_combinations, arg_combinations) {
       return;
     }
 
-    var combination = arg_combinations.shift();
+    var arg_combination = arg_combinations.shift();
+    var set_combination = set_combinations.shift();
 
-    runTest(command, combination, function(err, analysis){
+    runTest(command, set_combination, arg_combination, function(err, analysis){
 
       if (err) {
         console.warn(err);
@@ -95,8 +96,8 @@ function runTestSet(set_combinations, arg_combinations) {
       var report = analysis.duration+"ms\t"+command + "\t";
       delete analysis.duration;
 
-      for (var j= 0, m=combination.length; j<m; j++) {
-        report += combination[j] + "\t";
+      for (var j= 0, m=arg_combination.length; j<m; j++) {
+        report += arg_combination[j] + "\t";
       }
 
       for (var j in analysis) {
@@ -128,10 +129,9 @@ function outputTestCommands(set_combinations, arg_combinations) {
 
   for (var i=0; i<set_demo_indices.length; i++) {
 
-    var prefixedSet = prefixCombination(set_combinations[set_demo_indices[i]]);
-    var prefixedArgs = prefixCombination(arg_combinations[arg_demo_indices[i]]);
+    var prefixed = prefixCombination(set_combinations[set_demo_indices[i]], arg_combinations[arg_demo_indices[i]]);
 
-    console.log([ filenameFromPath(command), prefixedSet.join(" "), prefixedArgs.join(" ") ].join(" "));
+    console.log( filenameFromPath(command) + " " + prefixed.join(" ") );
   }
 }
 
@@ -142,32 +142,52 @@ function filenameFromPath(path) {
   return parts[parts.length - 1];
 }
 
+
 /**
- * When a builder has a prefix, push it into the args
+ * Build command line from test set and argument combinations, adding prefixes if they appear in config.
  *
- * @param combination
+ * @param arg_combination
  * @return {Array}
  */
-function prefixCombination(combination) {
+function prefixCombination(set_combination, arg_combination) {
 
   var prefixedArgs = [];
-  for (var i= 0, l=combination.length; i<l; i++) {
 
-    if (combination[i] === null) continue;
+  if (set_combination) {
+    for (var i= 0, l=set_combination.length; i<l; i++) {
 
-    if (arg_builders[i].config.prefix) {
-      prefixedArgs.push(arg_builders[i].config.prefix);
+      if (set_builders.length == 0) continue;
+      if (set_combination[i] === null) continue;
+
+      if (set_builders[i].config.prefix) {
+        prefixedArgs.push(set_builders[i].config.prefix);
+      }
+      prefixedArgs.push(set_combination[i]);
     }
-    prefixedArgs.push(combination[i]);
   }
+
+  if (arg_combination) {
+    for (var i= 0, l=arg_combination.length; i<l; i++) {
+
+      if (arg_combination[i] === null) continue;
+
+      if (arg_builders[i].config.prefix) {
+        prefixedArgs.push(arg_builders[i].config.prefix);
+      }
+      prefixedArgs.push(arg_combination[i]);
+    }
+  }
+  
   return prefixedArgs;
 }
 
-function runTest(command, combination, callback) {
+
+
+function runTest(command, set_combination, arg_combination, callback) {
 
   var startTime = (new Date()).getTime();
 
-  var prefixedArgs = prefixCombination(combination);
+  var prefixedArgs = prefixCombination(set_combination, arg_combination);
   var ps = cp.spawn(command, prefixedArgs);
 
   ps.stderr.setEncoding('utf8');
@@ -204,7 +224,7 @@ function runTest(command, combination, callback) {
 
     var endTime = (new Date()).getTime();
 
-    var analysis  = fitness.analyze(command, combination, output, err);
+    var analysis  = fitness.analyze(command, arg_combination, output, err);
 
     analysis.duration = endTime - startTime;
 
