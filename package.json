@@ -8,18 +8,22 @@
     "grunt-contrib-jshint": "~0.6.3",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-contrib-uglify": "~0.2.2"
+
+    "mocha": "*",
+    "chai" : "*"
   },
   "scripts":{
+    "test": "jasmine-node spec/*.spec.js"
   },
   "repository":{
     "type":"git",
     "url":"git@github.com:jbeuckm/evo.git"
   },
   "keywords":[
-	"genetic algorithm"
+	  "genetic algorithm"
   ],
   "dependencies": {
-    "commander": ">= 1",
-    "glob": ">= 1"
+    "commander": "2.x.x",
+    "glob": "3.x.x"
   }
 }
