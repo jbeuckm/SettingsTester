@@ -2,8 +2,7 @@
 
 var program = require('commander');
 var cp = require('child_process');
-var fs = require('fs');
-var ab = require('./lib/argument_builder.js');
+
 var testBuilder = require('./lib/test_builder.js');
 
 program
