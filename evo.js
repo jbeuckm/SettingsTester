@@ -95,7 +95,7 @@ function buildTests() {
 
 function testPopulation(population, set_combinations) {
   for (var i=0; i<population.length; i++) {
-    testSpecimen(population[i]);
+    testSpecimen(population[i], set_combinations);
   }
 }
 
