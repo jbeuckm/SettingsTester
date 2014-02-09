@@ -63,7 +63,6 @@ function buildTests() {
   // test mode - just output up to five rows
   if (program.test) {
     outputTestCommands(combinations);
-    return;
   }
   else {
     runTests(combinations);
@@ -111,16 +110,38 @@ function outputTestCommands(combinations) {
   }
 
   for (var i=0; i<demoIndices.length; i++) {
-    console.log(command + " " + combinations[demoIndices[i]].join(" "));
+    var prefixedArgs = prefixCombination(combinations[demoIndices[i]]);
+    console.log(command + " " + prefixedArgs.join(" "));
   }
 }
 
+/**
+ * When a builder has a prefix, push it into the args
+ *
+ * @param combination
+ * @return {Array}
+ */
+function prefixCombination(combination) {
 
-function runTest(command, args, callback) {
+  var prefixedArgs = [];
+  for (var i= 0, l=combination.length; i<l; i++) {
+
+    if (combination[i] === null) continue;
+
+    if (builders[i].config.prefix) {
+      prefixedArgs.push(builders[i].config.prefix);
+    }
+    prefixedArgs.push(combination[i]);
+  }
+  return prefixedArgs;
+}
+
+function runTest(command, combination, callback) {
 
   var startTime = (new Date()).getTime();
 
-  var ps = cp.spawn(command, args);
+  var prefixedArgs = prefixCombination(combination);
+  var ps = cp.spawn(command, prefixedArgs);
 
   ps.stderr.setEncoding('utf8');
   ps.stdout.setEncoding('utf8');
@@ -137,9 +158,11 @@ function runTest(command, args, callback) {
 
   ps.on('error', function (code) {
     console.log("error "+code);
+    callback(code);
   });
   ps.on('disconnect', function (code) {
     console.log("disconnect "+code);
+    callback(code);
   });
 
   ps.on('close', function(code){
@@ -153,11 +176,11 @@ function runTest(command, args, callback) {
 
     var endTime = (new Date()).getTime();
 
-    var analysis  = fitness.analyze(command, args, output, err);
+    var analysis  = fitness.analyze(command, combination, output, err);
     analysis.duration = endTime - startTime;
 
     if (code != 0) {
-      callback(stderr);
+      callback(err);
     }
     else {
       callback(null, analysis);

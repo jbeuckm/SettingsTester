@@ -1,5 +1,5 @@
 
-exports.analyze = function(command, args, stdout, stderr) {
+exports.analyze = function(command, combination, stdout, stderr) {
 
   return {
     fitness: stdout.split('').length

@@ -1,7 +1,14 @@
 
-exports.analyze = function(command, args, stdout, stderr) {
+exports.analyze = function(command, combination, stdout, stderr) {
 
-  console.log(stdout);
+  var result;
+  try {
+    result = JSON.parse(stdout);
+  }
+  catch (e) {
+    console.warn(e);
+    console.warn(stdout);
+  }
 
   return {
     fitness: stdout.split('').length

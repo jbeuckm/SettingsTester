@@ -14,7 +14,7 @@
 
     "autores": {
       "type": "option",
-      "values": ["", "-r"]
+      "values": [null, "-r"]
     },
     "model_ss": {
       "type": "float",
