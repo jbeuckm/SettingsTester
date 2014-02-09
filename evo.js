@@ -172,12 +172,12 @@ function runTestSet(test_set_combinations, arg_combination) {
         console.log(report.join('\t'));
       }
 
-      runNextTest();
+      return runNextTest();
     });
 
   }
 
-  runNextTest();
+  return runNextTest();
 }
 
 
