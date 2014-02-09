@@ -30,6 +30,7 @@ else {
   readConfigFile();
 }
 
+var config;
 var command;
 var set_builders = [];
 var arg_builders = [];
@@ -37,7 +38,8 @@ var arg_builders = [];
 
 function readConfigFile() {
 
-  testBuilder.readConfigFile(program.config, function(err, _command, _set_builders, _arg_builders) {
+  testBuilder.readConfigFile(program.config, function(err, _config, _command, _set_builders, _arg_builders) {
+    config = _config;
     command = _command;
     set_builders = _set_builders;
     arg_builders = _arg_builders;
@@ -51,19 +53,19 @@ function readConfigFile() {
 
 function buildTests() {
 
-  testBuilder.buildCombinations(arg_builders, test_builders, function(err, test_combinations, arg_combinations){
+  testBuilder.buildCombinations(arg_builders, set_builders, function(err, set_combinations, arg_combinations){
 
     if (!program.sorted) {
-      test_combinations = shuffle(test_combinations);
-      arg_combinations = shuffle(arg_combinations);
+      set_combinations = testBuilder.shuffle(set_combinations);
+      arg_combinations = testBuilder.shuffle(arg_combinations);
     }
 
     // test mode - just output up to five rows
     if (program.test) {
-      outputTestCommands(arg_combinations);
+      outputTestCommands(set_combinations, arg_combinations);
     }
     else {
-      runTests(arg_combinations);
+      runTestSet(arg_combinations);
     }
 
   });
@@ -72,7 +74,7 @@ function buildTests() {
 }
 
 
-function runTests(arg_combinations) {
+function runTestSet(set_combinations, arg_combinations) {
 
   function runNextTest() {
 
@@ -112,15 +114,15 @@ function runTests(arg_combinations) {
 }
 
 
-function outputTestCommands(arg_combinations) {
-  var demoIndices = [];
+function outputTestCommands(set_combinations, arg_combinations) {
+  var arg_demo_indices = [];
 
   for (var i=0; (i<5 && i<arg_combinations.length); i++) {
-    demoIndices.push(Math.floor(Math.random() * arg_combinations.length));
+    arg_demo_indices.push(Math.floor(Math.random() * arg_combinations.length));
   }
 
-  for (var i=0; i<demoIndices.length; i++) {
-    var prefixedArgs = prefixCombination(arg_combinations[demoIndices[i]]);
+  for (var i=0; i<arg_demo_indices.length; i++) {
+    var prefixedArgs = prefixCombination(arg_combinations[arg_demo_indices[i]]);
     console.log(command + " " + prefixedArgs.join(" "));
   }
 }

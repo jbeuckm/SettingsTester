@@ -19,7 +19,7 @@ describe("Test Builder", function() {
 
   it("reads a config file", function() {
 
-    builder.readConfig(config, function(err, command, args_builders, test_builders) {
+    builder.readConfig(config, function(err, config, command, args_builders, test_builders) {
       expect(command).toEqual("test");
       expect(args_builders.length).toEqual(1);
       expect(test_builders.length).toEqual(1);
@@ -43,7 +43,7 @@ describe("Test Builder", function() {
       }
     };
 
-    builder.readConfig(config, function(err, command, args_builders, test_builders) {
+    builder.readConfig(config, function(err, config, command, args_builders, test_builders) {
 
       builder.buildCombinations(args_builders, test_builders, function(err, test_combinations, arg_combinations){
         expect(test_combinations.length).toEqual(2);
