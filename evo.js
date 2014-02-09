@@ -81,7 +81,14 @@ function runTests(combinations) {
 
     runTest(command, combination, function(err, analysis){
 
+      if (err) {
+        console.warn(err);
+        runNextTest();
+        return;
+      }
+
       var report = analysis.duration+"ms\t"+command + "\t";
+      delete analysis.duration;
 
       for (var j= 0, m=combination.length; j<m; j++) {
         report += combination[j] + "\t";
@@ -166,8 +173,9 @@ function runTest(command, combination, callback) {
   });
 
   ps.on('close', function(code){
-    finish(code);
+//    finish(code);
   });
+
   ps.on('exit', function (code) {
     finish(code);
   });
@@ -177,10 +185,11 @@ function runTest(command, combination, callback) {
     var endTime = (new Date()).getTime();
 
     var analysis  = fitness.analyze(command, combination, output, err);
+
     analysis.duration = endTime - startTime;
 
     if (code != 0) {
-      callback(err);
+      callback("error: "+err);
     }
     else {
       callback(null, analysis);

@@ -1,8 +1,10 @@
 
 exports.analyze = function(command, combination, stdout, stderr) {
 
-  return {
-    fitness: stdout.split('').length
+  var resp =  {
+    fitness: (stdout)? stdout.split('').length : 0
   };
+
+  return resp;
 };
 
