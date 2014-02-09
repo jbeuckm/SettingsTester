@@ -127,27 +127,33 @@ function runTest(command, args, callback) {
 
   var output = "";
   ps.stdout.on('data', function (data) {
-    console.log('.');
+    console.log(data);
       output += data;
   });
 
   var err = "";
   ps.stderr.on('data', function (data) {
-    console.log('x');
+    console.warn(data);
     err += data;
   });
 
   ps.on('error', function (code) {
     console.log("error "+code);
   });
-  ps.on('exit', function (code) {
-    console.log("exit "+code);
-  });
   ps.on('disconnect', function (code) {
     console.log("disconnect "+code);
   });
 
-  ps.on('close', function (code) {
+  ps.on('close', function(code){
+    console.warn("process closed with code "+code);
+    finish(code);
+  });
+  ps.on('exit', function (code) {
+    console.warn("process exited with code "+code);
+    finish(code);
+  });
+
+  function finish(code) {
 
     var endTime = (new Date()).getTime();
 
@@ -155,13 +161,12 @@ function runTest(command, args, callback) {
     analysis.duration = endTime - startTime;
 
     if (code != 0) {
-      console.warn("process closed with code "+code);
       callback(stderr);
     }
     else {
       callback(null, analysis);
     }
-  });
-
+  }
+  
 }
 
