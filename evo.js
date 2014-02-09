@@ -104,22 +104,27 @@ function runTestSet(test_set_combinations, arg_combination) {
       }
       else {
 
-        var report = analysis.duration+"\t"+filenameFromPath(command) + "\t";
+        var report = [analysis.duration, filenameFromPath(command)];
         delete analysis.duration;
 
         for (var j= 0, m=set_combination.length; j<m; j++) {
-          report += set_combination[j] + "\t";
+
+          var set_item = set_combination[j];
+          if (set_builders[j].type == "path") {
+            set_item = filenameFromPath(set_item);
+          }
+          report.push(set_item);
         }
 
         for (var j= 0, m=arg_combination.length; j<m; j++) {
-          report += arg_combination[j] + "\t";
+          report.push(arg_combination[j]);
         }
 
         for (var j in analysis) {
-          report += analysis[j] + "\t";
+          report.push(analysis[j]);
         }
 
-        console.log(report);
+        console.log(report.join('\t'));
       }
 
       runNextTest();
