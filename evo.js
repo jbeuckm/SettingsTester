@@ -50,7 +50,6 @@ function readConfigFile() {
 }
 
 
-
 function buildTests() {
 
   var set_combinations = testBuilder.buildCombinations(set_builders);
@@ -67,13 +66,54 @@ function buildTests() {
   }
   else {
 
-    var arg_combination = arg_combinations.shift();
+    if (config.testing) {
 
-    var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
+      var population = [];
 
-    runTestSet(test_set_combinations, arg_combination);
+      for (var i=0; i<config.testing.population; i++) {
+
+        var specimen = {
+          arguments: arg_combinations.shift()
+        };
+
+        population.push(specimen);
+
+      }
+
+      testPopulation(population);
+
+    }
+    else {
+      var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
+      var results = runTestSet(test_set_combinations, arg_combinations.shift());
+      console.log(results);
+    }
   }
 
+}
+
+
+function testPopulation(population) {
+  for (var i=0; i<population.length; i++) {
+    testSpecimen(population[i]);
+  }
+}
+
+
+function testSpecimen(specimen, set_combinations) {
+
+  // build a set from the test pool
+  var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
+
+  // run the test
+  var results = runTestSet(test_set_combinations, specimen.arguments);
+
+  // record the result
+  var sum = 0;
+  for (var i=0; i<results.length; i++) {
+    sum += results.fitness;
+  }
+  specimen.fitness = sum / results.length;
 }
 
 
@@ -100,9 +140,14 @@ function runTestSet(test_set_combinations, arg_combination) {
 
       if (err) {
         console.warn(err);
-        return;
+        return results;
       }
       else {
+
+        results.push({
+          duration: analysis.duration,
+          fitness: analysis.fitness
+        });
 
         var report = [analysis.duration, filenameFromPath(command)];
         delete analysis.duration;
