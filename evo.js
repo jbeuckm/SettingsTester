@@ -80,7 +80,7 @@ function buildTests() {
 
       }
 
-      testPopulation(population);
+      testPopulation(population, set_combinations);
 
     }
     else {
@@ -93,7 +93,7 @@ function buildTests() {
 }
 
 
-function testPopulation(population) {
+function testPopulation(population, set_combinations) {
   for (var i=0; i<population.length; i++) {
     testSpecimen(population[i]);
   }
