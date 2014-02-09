@@ -11,11 +11,23 @@ A JSON file configures the test runner:
 {
     "command": "ls", // the command to run
 
-    "arguments": { // list of command line arguments
+    "arguments": { // list of named command line arguments 
+                   // in the order they will appear on the command line
 
       "mode": {
-        "type": "option", // discrete set of possble options to try
-        "prefix": ["", "-a", "-l", "-al"]
+        "type": "option", // discrete set of possible options to try
+        "prefix": "-k", // this argument will be run as "-k <value>"
+        "values": ["small", "big", "other"] // test values for this argument
+      },
+
+      {
+        "type": "integer",
+        "range": [2, 8] // test ints between 2 and 8 inclusive
+      },
+
+      {
+        "type": "path",
+        "path": "*.*" // test with all files in this directory
       }
 
     }
