@@ -104,8 +104,12 @@ function runTestSet(test_set_combinations, arg_combination) {
       }
       else {
 
-        var report = analysis.duration+"ms\t"+command + "\t";
+        var report = analysis.duration+"\t"+filenameFromPath(command) + "\t";
         delete analysis.duration;
+
+        for (var j= 0, m=set_combination.length; j<m; j++) {
+          report += set_combination[j] + "\t";
+        }
 
         for (var j= 0, m=arg_combination.length; j<m; j++) {
           report += arg_combination[j] + "\t";
@@ -131,7 +135,7 @@ function outputTestCommands(set_combinations, arg_combinations) {
 
   var set_demo_indices = [];
   for (var i=0; i<5; i++) {
-    set_demo_indices.push(Math.floor(Math.random() * set_combinations.length));
+    set_demo_indices.push(Math.floor(Math.random() * (set_combinations.length % set_combinations.length) ));
   }
 
   var arg_demo_indices = [];
@@ -139,7 +143,7 @@ function outputTestCommands(set_combinations, arg_combinations) {
     arg_demo_indices.push(Math.floor(Math.random() * arg_combinations.length));
   }
 
-  for (var i=0; i<set_demo_indices.length; i++) {
+  for (var i=0; i<arg_demo_indices.length; i++) {
 
     var prefixed = prefixCombination(set_combinations[set_demo_indices[i]], arg_combinations[arg_demo_indices[i]]);
 
@@ -236,7 +240,7 @@ function runTest(command, set_combination, arg_combination, callback) {
 
     var endTime = (new Date()).getTime();
 
-    var analysis  = fitness.analyze(command, arg_combination, output, err);
+    var analysis  = fitness.analyze(command, set_combination, arg_combination, output, err);
 
     analysis.duration = endTime - startTime;
 

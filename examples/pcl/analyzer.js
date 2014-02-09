@@ -1,5 +1,5 @@
 
-exports.analyze = function(command, combination, stdout, stderr) {
+exports.analyze = function(command, set_combination, arg_combination, stdout, stderr) {
 
   var result;
   try {
