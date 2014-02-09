@@ -167,6 +167,6 @@ function runTest(command, args, callback) {
       callback(null, analysis);
     }
   }
-  
+
 }
 
