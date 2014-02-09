@@ -126,7 +126,9 @@ function testSpecimen(specimen, set_combinations) {
  */
 function runTestSet(test_set_combinations, arg_combination) {
 
-  function runNextTest(results) {
+  var results = [];
+
+  function runNextTest() {
 
     if (test_set_combinations.length == 0) {
       return results;
@@ -138,7 +140,7 @@ function runTestSet(test_set_combinations, arg_combination) {
 
       if (err) {
         console.warn(err);
-        return results;
+        return runNextTest();
       }
       else {
 
@@ -170,14 +172,12 @@ function runTestSet(test_set_combinations, arg_combination) {
         console.log(report.join('\t'));
       }
 
-      return runNextTest(results);
+      return runNextTest();
     });
 
   }
 
-  var results = [];
-
-  return runNextTest(results);
+  return runNextTest();
 }
 
 
