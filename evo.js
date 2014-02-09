@@ -5,7 +5,6 @@ var cp = require('child_process');
 var fs = require('fs');
 var ab = require('./lib/argument_builder.js');
 var testBuilder = require('./lib/test_builder.js');
-var cartesian = require('./lib/cartesian.js');
 
 program
   .version('0.1')
@@ -49,43 +48,39 @@ function readConfigFile() {
 }
 
 
+
 function buildTests() {
 
-  var domains = [];
-  for (var i= 0, l=arg_builders.length; i<l; i++) {
-    domains.push(arg_builders[i].domain());
-  }
+  testBuilder.buildCombinations(arg_builders, test_builders, function(err, test_combinations, arg_combinations){
 
-  var combinations = cartesian.product(domains);
+    if (!program.sorted) {
+      test_combinations = shuffle(test_combinations);
+      arg_combinations = shuffle(arg_combinations);
+    }
 
-  if (!program.sorted) {
-    combinations = shuffle(combinations);
-  }
+    // test mode - just output up to five rows
+    if (program.test) {
+      outputTestCommands(arg_combinations);
+    }
+    else {
+      runTests(arg_combinations);
+    }
 
-  // test mode - just output up to five rows
-  if (program.test) {
-    outputTestCommands(combinations);
-  }
-  else {
-    runTests(combinations);
-  }
+  });
+
+
 }
 
-function shuffle(o){ //v1.0
-  for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-  return o;
-};
 
-
-function runTests(combinations) {
+function runTests(arg_combinations) {
 
   function runNextTest() {
 
-    if (combinations.length == 0) {
+    if (arg_combinations.length == 0) {
       return;
     }
 
-    var combination = combinations.shift();
+    var combination = arg_combinations.shift();
 
     runTest(command, combination, function(err, analysis){
 
@@ -117,15 +112,15 @@ function runTests(combinations) {
 }
 
 
-function outputTestCommands(combinations) {
+function outputTestCommands(arg_combinations) {
   var demoIndices = [];
 
-  for (var i=0; (i<5 && i<combinations.length); i++) {
-    demoIndices.push(Math.floor(Math.random() * combinations.length));
+  for (var i=0; (i<5 && i<arg_combinations.length); i++) {
+    demoIndices.push(Math.floor(Math.random() * arg_combinations.length));
   }
 
   for (var i=0; i<demoIndices.length; i++) {
-    var prefixedArgs = prefixCombination(combinations[demoIndices[i]]);
+    var prefixedArgs = prefixCombination(arg_combinations[demoIndices[i]]);
     console.log(command + " " + prefixedArgs.join(" "));
   }
 }
