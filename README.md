@@ -20,12 +20,12 @@ A JSON file configures the test runner:
         "values": ["small", "big", "other"] // test values for this argument
       },
 
-      {
+      "k arg": {
         "type": "integer",
         "range": [2, 8] // test ints between 2 and 8 inclusive
       },
 
-      {
+      "input file": {
         "type": "path",
         "path": "*.*" // test with all files in this directory
       }
