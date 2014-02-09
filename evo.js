@@ -10,6 +10,7 @@ program
   .option('-c, --config [json file]', 'test configuration file', 'config.json')
   .option('-a, --analyzer [js file]', 'fitness function for command output', 'analyzer.js')
   .option('-t, --test', 'just echo a few example commands to verify config')
+  .option('-s, --sorted', 'test combinations in order (random order by default)')
   .parse(process.argv);
 
 if (!program.config) {
@@ -64,7 +65,7 @@ function buildTests() {
       outputTestCommands(set_combinations, arg_combinations);
     }
     else {
-      runTestSet(arg_combinations);
+      runTestSet(set_combinations, arg_combinations);
     }
 
   });
@@ -114,18 +115,32 @@ function runTestSet(set_combinations, arg_combinations) {
 
 
 function outputTestCommands(set_combinations, arg_combinations) {
-  var arg_demo_indices = [];
 
+  var set_demo_indices = [];
+  for (var i=0; i<5; i++) {
+    set_demo_indices.push(Math.floor(Math.random() * set_combinations.length));
+  }
+
+  var arg_demo_indices = [];
   for (var i=0; (i<5 && i<arg_combinations.length); i++) {
     arg_demo_indices.push(Math.floor(Math.random() * arg_combinations.length));
   }
 
-  for (var i=0; i<arg_demo_indices.length; i++) {
+  for (var i=0; i<set_demo_indices.length; i++) {
+
+    var prefixedSet = prefixCombination(set_combinations[set_demo_indices[i]]);
     var prefixedArgs = prefixCombination(arg_combinations[arg_demo_indices[i]]);
-    console.log(command + " " + prefixedArgs.join(" "));
+
+    console.log([ filenameFromPath(command), prefixedSet.join(" "), prefixedArgs.join(" ") ].join(" "));
   }
 }
 
+
+function filenameFromPath(path) {
+  var parts = path.split('/');
+
+  return parts[parts.length - 1];
+}
 
 /**
  * When a builder has a prefix, push it into the args
