@@ -1,8 +1,9 @@
 {
   "testing": {
-    "test_size": 10,
-    "population": 8,
-    "generators": 3
+    "test_size": 30,
+    "population": 10,
+    "generators": 3,
+    "wildcards": 2
   },
 
   "command": "../../../pcl/build/correspondence_grouping",

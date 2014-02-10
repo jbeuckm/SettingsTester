@@ -50,6 +50,12 @@ function readConfigFile() {
 }
 
 
+function getRandomCombination(combinations) {
+    var index = Math.floor(Math.random() * combinations.length);
+    return combinations[index];
+}
+
+
 function buildTests() {
 
   var set_combinations = testBuilder.buildCombinations(set_builders);
@@ -86,7 +92,7 @@ function buildTests() {
 
 function buildAndTestPopulation(set_combinations, arg_combinations) {
 
-  var population = [];
+  var seedPopulation = [];
 
   for (var i = 0; i < config.testing.population; i++) {
 
@@ -96,21 +102,71 @@ function buildAndTestPopulation(set_combinations, arg_combinations) {
       arguments: arg_combinations[arg_combination_index]
     };
 
-    population.push(specimen);
+    seedPopulation.push(specimen);
 
   }
 
-  testPopulation(population, set_combinations, function (err, results) {
+  function runGeneration(population) {
+
+    testPopulation(population, set_combinations, function (err, results) {
 
     if (err) {
       console.warn(err);
     }
     else {
-      console.log(results);
+
+	population.sort(function(a,b){
+	    return b.fitness - a.fitness;
+  	});
+
+        var parents = population.slice(0, config.testing.generators);
+
+        var children = generate(parents, config.testing.population - config.testing.wildcards);
+	for (var i=0; i<config.testing.wildcards; i++) {
+	    children.push({
+		arguments: getRandomCombination(arg_combinations)
+	    });
+	}
+	
+	runGeneration(children);
+    }      
+    });
+  }
+
+    runGeneration(seedPopulation);
+}
+
+
+/**
+ * Combine parents genetically to produce <count> children
+ */
+function generate(parents, count) {
+
+    var children = [];
+    var argument_count = parents[0].arguments.length;
+
+    for (var i=0; i<count; i++) {
+	var child = { arguments:[] };
+
+	for (var j=0; j<argument_count; j++) {
+
+	    var parent_traits = [];
+	    for (var k=0; k<parents.length; k++) {
+		parent_traits.push(parents[k].arguments[j]);
+	    }
+
+	    var parent_traits = parents.map(function(d){
+		return d.arguments[j];
+	    });
+
+	    var builder = arg_builders[j];
+
+	    child.arguments.push(builder.mate(parent_traits));
+	}
+
+	children.push(child);
     }
-
-  });
-
+    return children;
 }
 
 
@@ -169,7 +225,7 @@ function testSpecimen(specimen, set_combinations, callback) {
     // record the result
     var sum = 0;
     for (var i = 0; i < results.length; i++) {
-      sum += results.fitness;
+      sum += results[i].fitness;
     }
     specimen.fitness = sum / results.length;
 
