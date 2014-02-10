@@ -191,16 +191,15 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
 
   function runNextTest() {
 
+    console.log("runNextTest "+testSetIndex+"/"+test_set_combinations.length);
+    console.log(arg_combination);
+
     if (test_set_combinations.length <= testSetIndex) {
       callback(null, results);
     }
 
     var set_combination = test_set_combinations[testSetIndex];
     testSetIndex++;
-
-    console.log(testSetIndex);
-    console.log("tsc.len = " + test_set_combinations.length);
-    console.log(arg_combination);
 
     runTest(command, set_combination, arg_combination, function (err, analysis) {
 
