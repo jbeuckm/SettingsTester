@@ -121,7 +121,6 @@ function testPopulation(population, set_combinations, callback) {
   var results = [];
 
   function testNextSpecimen() {
-console.log("testNextSpecimen "+specimenIndex+"/"+population.length);
 
     if (specimenIndex >= population.length) {
       callback(null, results);
@@ -136,6 +135,8 @@ console.log("testNextSpecimen "+specimenIndex+"/"+population.length);
         callback(err);
         return;
       }
+
+      console.log(specimen);
 
       results.push(testResults);
 
@@ -156,7 +157,6 @@ function testSpecimen(specimen, set_combinations, callback) {
 
   // build a set from the test pool
   var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
-console.log("built test set with "+test_set_combinations.length+" combinations.");
 
   // run the test
   runTestSet(test_set_combinations, specimen.arguments, function (err, results) {
@@ -192,9 +192,6 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
   var results = [];
 
   function runNextTest() {
-
-    console.log("runNextTest "+testSetIndex+"/"+test_set_combinations.length);
-    console.log(arg_combination);
 
     if (test_set_combinations.length <= testSetIndex) {
       callback(null, results);
