@@ -80,40 +80,76 @@ function buildTests() {
 
       }
 
-      testPopulation(population, set_combinations);
+      testPopulation(population, set_combinations, function(results){
+        console.log(results);
+      });
 
     }
     else {
       var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
-      var results = runTestSet(test_set_combinations, arg_combinations.shift());
-      console.log(results);
+      runTestSet(test_set_combinations, arg_combinations.shift(), function(err, results){
+        console.log(results);
+      });
     }
   }
 
 }
 
 
-function testPopulation(population, set_combinations) {
-  for (var i=0; i<population.length; i++) {
-    testSpecimen(population[i], set_combinations);
+function testPopulation(population, set_combinations, callback) {
+
+  var specimenIndex = 0;
+  var results = [];
+
+  function testNextSpecimen() {
+
+    if (specimenIndex >= population.length) {
+      callback(null, results);
+    }
+
+    var specimen = population[specimenIndex];
+    specimenIndex++;
+
+    testSpecimen(specimen, set_combinations, function(err, testResults){
+      if (err) {
+        callback(err);
+      }
+
+      results.push(testResults);
+
+      testNextSpecimen();
+    });
+
   }
+
+  testNextSpecimen();
 }
 
 
-function testSpecimen(specimen, set_combinations) {
+function testSpecimen(specimen, set_combinations, callback) {
 
   // build a set from the test pool
   var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
 
   // run the test
-  var results = runTestSet(test_set_combinations, specimen.arguments);
+  runTestSet(test_set_combinations, specimen.arguments, function(err, results) {
 
-  // record the result
-  var sum = 0;
-  for (var i=0; i<results.length; i++) {
-    sum += results.fitness;
-  }
-  specimen.fitness = sum / results.length;
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    // record the result
+    var sum = 0;
+    for (var i=0; i<results.length; i++) {
+      sum += results.fitness;
+    }
+    specimen.fitness = sum / results.length;
+
+    callback(null, results);
+
+  });
+
 }
 
 
@@ -124,14 +160,14 @@ function testSpecimen(specimen, set_combinations) {
  * @param test_set_combinations
  * @param arg_combination
  */
-function runTestSet(test_set_combinations, arg_combination) {
+function runTestSet(test_set_combinations, arg_combination, callback) {
 
   var results = [];
 
   function runNextTest() {
 
     if (test_set_combinations.length == 0) {
-      return results;
+      callback(null, results);
     }
 
     var set_combination = test_set_combinations.shift();
@@ -140,7 +176,7 @@ function runTestSet(test_set_combinations, arg_combination) {
 
       if (err) {
         console.warn(err);
-        return runNextTest();
+        runNextTest();
       }
       else {
 
@@ -152,6 +188,7 @@ function runTestSet(test_set_combinations, arg_combination) {
         var report = [analysis.duration, filenameFromPath(command)];
         delete analysis.duration;
 
+        if (set_combination)
         for (var j= 0, m=set_combination.length; j<m; j++) {
 
           var set_item = set_combination[j];
@@ -172,12 +209,12 @@ function runTestSet(test_set_combinations, arg_combination) {
         console.log(report.join('\t'));
       }
 
-      return runNextTest();
+      runNextTest();
     });
 
   }
 
-  return runNextTest();
+  runNextTest();
 }
 
 
