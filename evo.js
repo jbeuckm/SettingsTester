@@ -49,6 +49,7 @@ function readConfigFile() {
 
 }
 
+function buildTests() {
 
   var set_combinations = testBuilder.buildCombinations(set_builders);
   var arg_combinations = testBuilder.buildCombinations(arg_builders);
