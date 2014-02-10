@@ -51,8 +51,8 @@ function readConfigFile() {
 
 
 function getRandomCombination(combinations) {
-    var index = Math.floor(Math.random() * combinations.length);
-    return combinations[index];
+  var index = Math.floor(Math.random() * combinations.length);
+  return combinations[index];
 }
 
 
@@ -96,10 +96,8 @@ function buildAndTestPopulation(set_combinations, arg_combinations) {
 
   for (var i = 0; i < config.testing.population; i++) {
 
-    var arg_combination_index = i % arg_combinations.length;
-
     var specimen = {
-      arguments: arg_combinations[arg_combination_index]
+      arguments: getRandomCombination(arg_combinations)
     };
 
     seedPopulation.push(specimen);
@@ -108,32 +106,35 @@ function buildAndTestPopulation(set_combinations, arg_combinations) {
 
   function runGeneration(population) {
 
-    testPopulation(population, set_combinations, function (err, results) {
+    // build a set from the test pool to test this population
+    var test_set = testBuilder.buildTestSet(config, set_combinations);
 
-    if (err) {
-      console.warn(err);
-    }
-    else {
+    testPopulation(population, test_set, function (err, results) {
 
-	population.sort(function(a,b){
-	    return b.fitness - a.fitness;
-  	});
+      if (err) {
+        console.warn(err);
+      }
+      else {
+
+        population.sort(function (a, b) {
+          return b.fitness - a.fitness;
+        });
 
         var parents = population.slice(0, config.testing.generators);
 
         var children = generate(parents, config.testing.population - config.testing.wildcards);
-	for (var i=0; i<config.testing.wildcards; i++) {
-	    children.push({
-		arguments: getRandomCombination(arg_combinations)
-	    });
-	}
-	
-	runGeneration(children);
-    }      
+        for (var i = 0; i < config.testing.wildcards; i++) {
+          children.push({
+            arguments: getRandomCombination(arg_combinations)
+          });
+        }
+
+        runGeneration(children);
+      }
     });
   }
 
-    runGeneration(seedPopulation);
+  runGeneration(seedPopulation);
 }
 
 
@@ -142,36 +143,35 @@ function buildAndTestPopulation(set_combinations, arg_combinations) {
  */
 function generate(parents, count) {
 
-    var children = [];
-    var argument_count = parents[0].arguments.length;
+  var children = [];
+  var argument_count = parents[0].arguments.length;
 
-    for (var i=0; i<count; i++) {
-	var child = { arguments:[] };
+  for (var i = 0; i < count; i++) {
+    var child = { arguments: [] };
 
-	for (var j=0; j<argument_count; j++) {
+    for (var j = 0; j < argument_count; j++) {
 
-	    var parent_traits = [];
-	    for (var k=0; k<parents.length; k++) {
-		parent_traits.push(parents[k].arguments[j]);
-	    }
+      var parent_traits = [];
+      for (var k = 0; k < parents.length; k++) {
+        parent_traits.push(parents[k].arguments[j]);
+      }
 
-	    var parent_traits = parents.map(function(d){
-		return d.arguments[j];
-	    });
+      var parent_traits = parents.map(function (d) {
+        return d.arguments[j];
+      });
 
-	    var builder = arg_builders[j];
+      var builder = arg_builders[j];
 
-	    child.arguments.push(builder.mate(parent_traits));
-	}
-
-	children.push(child);
+      child.arguments.push(builder.mate(parent_traits));
     }
-    return children;
+
+    children.push(child);
+  }
+  return children;
 }
 
 
-
-function testPopulation(population, set_combinations, callback) {
+function testPopulation(population, test_set, callback) {
 
   var specimenIndex = 0;
   var results = [];
@@ -185,7 +185,7 @@ function testPopulation(population, set_combinations, callback) {
 
     var specimen = population[specimenIndex++];
 
-    testSpecimen(specimen, set_combinations, function (err, testResults) {
+    testSpecimen(specimen, test_set, function (err, testResults) {
 
       if (err) {
         callback(err);
@@ -205,17 +205,14 @@ function testPopulation(population, set_combinations, callback) {
 }
 
 
-function testSpecimen(specimen, set_combinations, callback) {
+function testSpecimen(specimen, test_set, callback) {
 
   if (!specimen) {
     callback("empty specimen");
   }
 
-  // build a set from the test pool
-  var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
-
   // run the test
-  runTestSet(test_set_combinations, specimen.arguments, function (err, results) {
+  runTestSet(test_set, specimen.arguments, function (err, results) {
 
     if (err) {
       callback(err);

@@ -5,11 +5,14 @@ exports.analyze = function(command, set_combination, arg_combination, stdout, st
   try {
     result = JSON.parse(stdout);
 
-//    console.log(result);
+    var fitness = result.instances;
+    if (model_keypoints > 10) {
+      fitness += .1 * result.correspondences/result.model_keypoints;
+    }
 
-  return {
-    fitness: result.instances * 10 + result.correspondences/result.model_keypoints
-  };
+    return {
+      fitness: fitness
+    };
 
   }
   catch (e) {
