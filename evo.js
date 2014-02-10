@@ -183,7 +183,6 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
 
     var set_combination = test_set.pop();
 
-    console.log(testSetIndex++);
     console.log("tsc.len = " + test_set_combinations.length);
     console.log(arg_combination);
 
