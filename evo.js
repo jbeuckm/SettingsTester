@@ -22,9 +22,9 @@ if (!program.config) {
 var fitness;
 if (program.analyzer) {
 
-    fitness = require(process.cwd() + "/" + program.analyzer);
+  fitness = require(process.cwd() + "/" + program.analyzer);
 
-    readConfigFile();
+  readConfigFile();
 }
 else {
   readConfigFile();
@@ -38,7 +38,7 @@ var arg_builders = [];
 
 function readConfigFile() {
 
-  testBuilder.readConfigFile(program.config, function(err, _config, _command, _set_builders, _arg_builders) {
+  testBuilder.readConfigFile(program.config, function (err, _config, _command, _set_builders, _arg_builders) {
     config = _config;
     command = _command;
     set_builders = _set_builders;
@@ -49,8 +49,6 @@ function readConfigFile() {
 
 }
 
-
-function buildTests() {
 
   var set_combinations = testBuilder.buildCombinations(set_builders);
   var arg_combinations = testBuilder.buildCombinations(arg_builders);
@@ -70,7 +68,7 @@ function buildTests() {
 
       var population = [];
 
-      for (var i=0; i<config.testing.population; i++) {
+      for (var i = 0; i < config.testing.population; i++) {
 
         var specimen = {
           arguments: arg_combinations.shift()
@@ -80,14 +78,14 @@ function buildTests() {
 
       }
 
-      testPopulation(population, set_combinations, function(results){
+      testPopulation(population, set_combinations, function (results) {
         console.log(results);
       });
 
     }
     else {
       var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
-      runTestSet(test_set_combinations, arg_combinations.shift(), function(err, results){
+      runTestSet(test_set_combinations, arg_combinations.shift(), function (err, results) {
         console.log(results);
       });
     }
@@ -98,19 +96,21 @@ function buildTests() {
 
 function testPopulation(population, set_combinations, callback) {
 
-  var specimenIndex = 0;
-  var results = [];
+  var test_argument_combinations = [];
+  for (var i = 0; i < population.length; i++) {
+    test_argument_combinations.push(population[i]);
+  }
+
 
   function testNextSpecimen() {
 
-    if (specimenIndex >= population.length) {
+    if (test_argument_combinations.length == 0) {
       callback(null, results);
     }
 
-    var specimen = population[specimenIndex];
-      specimenIndex++;
+    var specimen = test_argument_combinations.pop();
 
-    testSpecimen(specimen, set_combinations, function(err, testResults){
+    testSpecimen(specimen, set_combinations, function (err, testResults) {
 
       if (err) {
         callback(err);
@@ -129,16 +129,16 @@ function testPopulation(population, set_combinations, callback) {
 
 function testSpecimen(specimen, set_combinations, callback) {
 
-    if (!specimen) {
-	console.warn("empty specimen");
-	callback(err);
-    }
+  if (!specimen) {
+    console.warn("empty specimen");
+    callback(err);
+  }
 
   // build a set from the test pool
   var test_set_combinations = testBuilder.buildTestSet(config, set_combinations);
 
   // run the test
-  runTestSet(test_set_combinations, specimen.arguments, function(err, results) {
+  runTestSet(test_set_combinations, specimen.arguments, function (err, results) {
 
     if (err) {
       callback(err);
@@ -147,7 +147,7 @@ function testSpecimen(specimen, set_combinations, callback) {
 
     // record the result
     var sum = 0;
-    for (var i=0; i<results.length; i++) {
+    for (var i = 0; i < results.length; i++) {
       sum += results.fitness;
     }
     specimen.fitness = sum / results.length;
@@ -159,7 +159,6 @@ function testSpecimen(specimen, set_combinations, callback) {
 }
 
 
-
 /**
  *  Run these arguments with all combinations of the test set.
  *
@@ -168,23 +167,26 @@ function testSpecimen(specimen, set_combinations, callback) {
  */
 function runTestSet(test_set_combinations, arg_combination, callback) {
 
-    var testSetIndex = 0;
+  var test_set = [];
+  for (var i = 0; i < test_set_combinations.length; i++) {
+    test_set.push(test_set_combinations[i]);
+  }
+
   var results = [];
 
   function runNextTest() {
 
-    if (test_set_combinations.length <= testSetIndex) {
+    if (test_set.length == 0) {
       callback(null, results);
     }
 
-      var set_combination = test_set_combinations[testSetIndex];
-      testSetIndex++;
+    var set_combination = test_set.pop();
 
-      console.log(testSetIndex++);
-      console.log("tsc.len = "+test_set_combinations.length);
-      console.log(arg_combination);
+    console.log(testSetIndex++);
+    console.log("tsc.len = " + test_set_combinations.length);
+    console.log(arg_combination);
 
-    runTest(command, set_combination, arg_combination, function(err, analysis){
+    runTest(command, set_combination, arg_combination, function (err, analysis) {
 
       if (err) {
         console.warn(err);
@@ -201,16 +203,16 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
         delete analysis.duration;
 
         if (set_combination)
-        for (var j= 0, m=set_combination.length; j<m; j++) {
+          for (var j = 0, m = set_combination.length; j < m; j++) {
 
-          var set_item = set_combination[j];
-          if (set_builders[j].config.type == "path") {
-            set_item = filenameFromPath(set_item);
+            var set_item = set_combination[j];
+            if (set_builders[j].config.type == "path") {
+              set_item = filenameFromPath(set_item);
+            }
+            report.push(set_item);
           }
-          report.push(set_item);
-        }
 
-        for (var j= 0, m=arg_combination.length; j<m; j++) {
+        for (var j = 0, m = arg_combination.length; j < m; j++) {
           report.push(arg_combination[j]);
         }
 
@@ -233,20 +235,20 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
 function outputTestCommands(set_combinations, arg_combinations) {
 
   var set_demo_indices = [];
-  for (var i=0; i<5; i++) {
-    set_demo_indices.push(Math.floor(Math.random() * (set_combinations.length % set_combinations.length) ));
+  for (var i = 0; i < 5; i++) {
+    set_demo_indices.push(Math.floor(Math.random() * (set_combinations.length % set_combinations.length)));
   }
 
   var arg_demo_indices = [];
-  for (var i=0; (i<5 && i<arg_combinations.length); i++) {
+  for (var i = 0; (i < 5 && i < arg_combinations.length); i++) {
     arg_demo_indices.push(Math.floor(Math.random() * arg_combinations.length));
   }
 
-  for (var i=0; i<arg_demo_indices.length; i++) {
+  for (var i = 0; i < arg_demo_indices.length; i++) {
 
     var prefixed = prefixCombination(set_combinations[set_demo_indices[i]], arg_combinations[arg_demo_indices[i]]);
 
-    console.log( filenameFromPath(command) + " " + prefixed.join(" ") );
+    console.log(filenameFromPath(command) + " " + prefixed.join(" "));
   }
 }
 
@@ -269,7 +271,7 @@ function prefixCombination(set_combination, arg_combination) {
   var prefixedArgs = [];
 
   if (set_combination) {
-    for (var i= 0, l=set_combination.length; i<l; i++) {
+    for (var i = 0, l = set_combination.length; i < l; i++) {
 
       if (set_builders.length == 0) continue;
       if (set_combination[i] === null) continue;
@@ -282,7 +284,7 @@ function prefixCombination(set_combination, arg_combination) {
   }
 
   if (arg_combination) {
-    for (var i= 0, l=arg_combination.length; i<l; i++) {
+    for (var i = 0, l = arg_combination.length; i < l; i++) {
 
       if (arg_combination[i] === null) continue;
 
@@ -295,7 +297,6 @@ function prefixCombination(set_combination, arg_combination) {
 
   return prefixedArgs;
 }
-
 
 
 function runTest(command, set_combination, arg_combination, callback) {
@@ -319,15 +320,15 @@ function runTest(command, set_combination, arg_combination, callback) {
   });
 
   ps.on('error', function (code) {
-    console.log("error "+code);
+    console.log("error " + code);
     callback(code);
   });
   ps.on('disconnect', function (code) {
-    console.log("disconnect "+code);
+    console.log("disconnect " + code);
     callback(code);
   });
 
-  ps.on('close', function(code){
+  ps.on('close', function (code) {
 //    finish(code);
   });
 
@@ -339,12 +340,12 @@ function runTest(command, set_combination, arg_combination, callback) {
 
     var endTime = (new Date()).getTime();
 
-    var analysis  = fitness.analyze(command, set_combination, arg_combination, output, err);
+    var analysis = fitness.analyze(command, set_combination, arg_combination, output, err);
 
     analysis.duration = endTime - startTime;
 
     if (code != 0) {
-      callback("error: "+err);
+      callback("error: " + err);
     }
     else {
       callback(null, analysis);
