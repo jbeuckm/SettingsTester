@@ -23,7 +23,7 @@ exports.analyze = function(command, set_combination, arg_combination, stdout, st
 
       var modelInScene = false;
     if (scene.indexOf(model) != -1) { // model is in the scene
-      fitness = result.instances;
+      fitness = 2 * result.instances;
 	modelInScene = true;
     }
     else { // // model is NOT in the scene
@@ -31,12 +31,20 @@ exports.analyze = function(command, set_combination, arg_combination, stdout, st
         fitness = .5; // award non-false-positive
       }
       else {
-        fitness = -.5 * result.instances; // punish false-positive
+        fitness = -result.instances; // punish false-positive
       }
     }
 
     if (result.model_keypoints > 10) {
-      fitness += .1 * result.correspondences/result.model_keypoints;
+	var multiplier;
+     
+	if (modelInScene) {
+	    multiplier = .3;
+	}
+	else {
+	    multiplier = .1;
+	}
+ fitness += multiplier * result.correspondences/result.model_keypoints;
     }
 
     return {

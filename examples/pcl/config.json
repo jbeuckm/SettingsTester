@@ -21,6 +21,12 @@
       "path": "/myshare/pointclouds/scenes/*.pcd"
     },
 
+"algo": {
+"type": "option",
+"values": ["Hough","GC"],
+"prefix": "--algorithm"
+},
+
     "autores": {
       "type": "option",
       "values": ["-r"]
@@ -28,23 +34,22 @@
     "model_ss": {
       "type": "float",
       "prefix": "--model_ss",
-      "range": [7.3, 7.7]
-
+      "range": [6,9]
     },
     "scene_ss": {
       "prefix": "--scene_ss",
-      "type": "integer",
-      "range": [17, 23]
+      "type": "float",
+      "range": [15,25]
     },
     "rf_rad": {
       "prefix": "--rf_rad",
-      "type": "integer",
-      "range": [8, 12]
+      "type": "option",
+      "values": [5,10,15,20]
     },
     "descr_rad": {
       "prefix": "--descr_rad",
-      "type": "integer",
-      "range": [13, 17]
+      "type": "option",
+      "values": [5,10,15,20]
     },
     "cg_size": {
       "prefix": "--cg_size",

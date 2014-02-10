@@ -119,6 +119,8 @@ function buildAndTestPopulation(set_combinations, arg_combinations) {
         population.sort(function (a, b) {
           return b.fitness - a.fitness;
         });
+	  console.log("last population results:");
+	  console.log(population);
 
         var parents = population.slice(0, config.testing.generators);
 
@@ -266,7 +268,7 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
           fitness: analysis.fitness
         });
 
-        var report = [analysis.duration, filenameFromPath(command)];
+        var report = [analysis.duration];
         delete analysis.duration;
 
         if (set_combination)
@@ -276,11 +278,22 @@ function runTestSet(test_set_combinations, arg_combination, callback) {
             if (set_builders[j].config.type == "path") {
               set_item = filenameFromPath(set_item);
             }
+	     
             report.push(set_item);
           }
 
         for (var j = 0, m = arg_combination.length; j < m; j++) {
-          report.push(arg_combination[j]);
+	    switch (arg_builders[j].config.type) {
+	    case "float":
+		report.push(arg_combination[j].toFixed(3));
+		break;
+	    default:
+ report.push(arg_combination[j]);
+		break;
+
+	    }
+
+         
         }
 
         for (var j in analysis) {
