@@ -23,18 +23,18 @@
 
     "autores": {
       "type": "option",
-      "values": [null, "-r"]
+      "values": ["-r"]
     },
     "model_ss": {
       "type": "float",
       "prefix": "--model_ss",
-      "range": [7.0, 8.0]
+      "range": [7.3, 7.7]
 
     },
     "scene_ss": {
       "prefix": "--scene_ss",
       "type": "integer",
-      "range": [15, 25]
+      "range": [17, 23]
     },
     "rf_rad": {
       "prefix": "--rf_rad",
