@@ -38,17 +38,17 @@
     "rf_rad": {
       "prefix": "--rf_rad",
       "type": "integer",
-      "range": [5, 15]
+      "range": [8, 12]
     },
     "descr_rad": {
       "prefix": "--descr_rad",
       "type": "integer",
-      "range": [10, 20]
+      "range": [13, 17]
     },
     "cg_size": {
       "prefix": "--cg_size",
       "type": "integer",
-      "range": [5, 15]
+      "range": [8, 12]
     }
   }
 }
