@@ -102,6 +102,7 @@ function testPopulation(population, set_combinations, callback) {
     test_argument_combinations.push(population[i]);
   }
 
+  var results = [];
 
   function testNextSpecimen() {
 
