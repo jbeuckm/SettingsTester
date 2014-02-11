@@ -6,7 +6,7 @@
     "wildcards": 2
   },
 
-  "command": "../../../pcl/build/correspondence_grouping",
+  "command": "test_app/build/correspondence_grouping",
 
   "arguments": {
 

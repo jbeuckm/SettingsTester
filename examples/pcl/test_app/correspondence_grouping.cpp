@@ -198,7 +198,7 @@ main (int argc, char *argv[])
     return (-1);
   }
 
-  pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
+  pcl::StatisticalOutlierRemoval<PointType> sor;
 
   sor.setInputCloud (model_raw);
   sor.setMeanK (50);
