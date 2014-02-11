@@ -13,6 +13,8 @@
 #include <pcl/common/transforms.h>
 #include <pcl/console/parse.h>
 
+#include <pcl/filters/statistical_outlier_removal.h>
+
 typedef pcl::PointXYZRGBA PointType;
 typedef pcl::Normal NormalType;
 typedef pcl::ReferenceFrame RFType;
@@ -166,30 +168,48 @@ main (int argc, char *argv[])
 {
   parseCommandLine (argc, argv);
 
+  pcl::PointCloud<PointType>::Ptr model_raw (new pcl::PointCloud<PointType> ());
   pcl::PointCloud<PointType>::Ptr model (new pcl::PointCloud<PointType> ());
   pcl::PointCloud<PointType>::Ptr model_keypoints (new pcl::PointCloud<PointType> ());
+
+  pcl::PointCloud<PointType>::Ptr scene_raw (new pcl::PointCloud<PointType> ());
   pcl::PointCloud<PointType>::Ptr scene (new pcl::PointCloud<PointType> ());
   pcl::PointCloud<PointType>::Ptr scene_keypoints (new pcl::PointCloud<PointType> ());
+
   pcl::PointCloud<NormalType>::Ptr model_normals (new pcl::PointCloud<NormalType> ());
   pcl::PointCloud<NormalType>::Ptr scene_normals (new pcl::PointCloud<NormalType> ());
+
   pcl::PointCloud<DescriptorType>::Ptr model_descriptors (new pcl::PointCloud<DescriptorType> ());
   pcl::PointCloud<DescriptorType>::Ptr scene_descriptors (new pcl::PointCloud<DescriptorType> ());
 
   //
   //  Load clouds
   //
-  if (pcl::io::loadPCDFile (model_filename_, *model) < 0)
+  if (pcl::io::loadPCDFile (model_filename_, *model_raw) < 0)
   {
     std::cout << "Error loading model cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }
-  if (pcl::io::loadPCDFile (scene_filename_, *scene) < 0)
+  if (pcl::io::loadPCDFile (scene_filename_, *scene_raw) < 0)
   {
     std::cout << "Error loading scene cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }
+
+  pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
+
+  sor.setInputCloud (model_raw);
+  sor.setMeanK (50);
+  sor.setStddevMulThresh (1.0);
+  sor.filter (*model);
+
+  sor.setInputCloud (scene_raw);
+  sor.setMeanK (50);
+  sor.setStddevMulThresh (1.0);
+  sor.filter (*scene);
+
 
   model_resolution =  static_cast<float> (computeCloudResolution (model));
   scene_resolution = static_cast<float> (computeCloudResolution (scene));
