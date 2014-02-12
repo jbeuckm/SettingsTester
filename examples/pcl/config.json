@@ -1,9 +1,9 @@
 {
   "testing": {
-    "test_size": 30,
+    "test_size": 40,
     "population": 10,
-    "generators": 3,
-    "wildcards": 2
+    "generators": 2,
+    "wildcards": 1
   },
 
   "command": "test_app/build/correspondence_grouping",
@@ -21,11 +21,11 @@
       "path": "/myshare/pointclouds/scenes/*.pcd"
     },
 
-"algo": {
-"type": "option",
-"values": ["Hough","GC"],
-"prefix": "--algorithm"
-},
+    "algo": {
+      "type": "option",
+      "values": ["GC"],
+      "prefix": "--algorithm"
+    },
 
     "autores": {
       "type": "option",
@@ -34,27 +34,27 @@
     "model_ss": {
       "type": "float",
       "prefix": "--model_ss",
-      "range": [6,9]
+      "range": [5,25]
     },
     "scene_ss": {
       "prefix": "--scene_ss",
       "type": "float",
-      "range": [15,25]
+      "range": [5,25]
     },
     "rf_rad": {
       "prefix": "--rf_rad",
-      "type": "option",
-      "values": [5,10,15,20]
+      "type": "float",
+      "range": [5,20]
     },
     "descr_rad": {
       "prefix": "--descr_rad",
-      "type": "option",
-      "values": [5,10,15,20]
+      "type": "float",
+      "range": [5,20]
     },
     "cg_size": {
       "prefix": "--cg_size",
-      "type": "integer",
-      "range": [8, 12]
+      "type": "float",
+      "range": [7, 13]
     }
   }
 }

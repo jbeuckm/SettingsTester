@@ -38,6 +38,9 @@ float cg_thresh_ (5.0f);
 float model_resolution;
 float scene_resolution;
 
+int scene_noise_trimmed;
+int model_noise_trimmed;
+
 bool show_vis_ (false);
 
 void
@@ -200,16 +203,19 @@ main (int argc, char *argv[])
 
   pcl::StatisticalOutlierRemoval<PointType> sor;
 
+  int model_points = model_raw->size();
   sor.setInputCloud (model_raw);
   sor.setMeanK (50);
   sor.setStddevMulThresh (1.0);
   sor.filter (*model);
+  model_noise_trimmed = model_points - model->size();
 
+  int scene_points = scene_raw->size();
   sor.setInputCloud (scene_raw);
   sor.setMeanK (50);
   sor.setStddevMulThresh (1.0);
   sor.filter (*scene);
-
+  scene_noise_trimmed = scene_points - scene->size();
 
   model_resolution =  static_cast<float> (computeCloudResolution (model));
   scene_resolution = static_cast<float> (computeCloudResolution (scene));
@@ -369,6 +375,7 @@ main (int argc, char *argv[])
   }
 
   std::cout << "{";
+  std::cout << "\"scene_noise_trimmed\":" << scene_noise_trimmed << ","; std::cout << "\"model_noise_trimmed\":" << model_noise_trimmed << ","; 
   std::cout << "\"model_resolution\":" << model_resolution << ","; std::cout << "\"scene_resolution\":" << scene_resolution << ",";
   std::cout << "\"instances\":" << int(clustered_corrs.size()) << ",";
   std::cout << "\"model_points\":" << model->size() << ",";
